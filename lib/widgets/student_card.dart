@@ -36,8 +36,27 @@ class StudentCard extends StatelessWidget {
               print('show check out dialog');
               showDialog(
                   context: context,
-                  builder: (BuildContext context) =>
-                      CheckOutDialog(studentData));
+                  builder: (BuildContext context) => Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ButtonTheme(
+                                  minWidth: double.infinity,
+                                  child: RaisedButton(
+                                    color: HexColor('c94f4f'),
+                                    onPressed: () {
+                                      classData.checkInStudent(
+                                          classData.id, studentData);
+                                    },
+                                    child: Text("SIGN OUT"),
+                                  ))
+                            ]),
+                      )));
             },
           ),
         ));

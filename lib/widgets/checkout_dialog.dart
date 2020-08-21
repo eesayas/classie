@@ -8,6 +8,19 @@ class CheckOutDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //define data
+    final classData = Provider.of<Class>(context);
+
+    //button click
+    void onButtonClick() {
+      if (studentData['student']['checkedIn']) {
+        classData.checkOutStudent(classData.id, studentData);
+        Navigator.pop(context, true);
+      } else {
+        print('send 2nd alarm');
+      }
+    }
+
     return Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
@@ -42,11 +55,8 @@ class CheckOutDialog extends StatelessWidget {
                 minWidth: double.infinity,
                 child: RaisedButton(
                   color: HexColor('C94F4F'),
-                  onPressed: () => {
-                    if (studentData['student']['checkedIn'])
-                      {Navigator.pop(context, true)}
-                    else
-                      {print('send 2nd alarm')}
+                  onPressed: () {
+                    onButtonClick();
                   },
                   child: Text(
                     studentData['student']['checkedIn']

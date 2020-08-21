@@ -42,17 +42,16 @@ class Classes with ChangeNotifier {
 
       classData.forEach((data) {
         //filter
-        Map<String, List> filterResult = filterOvertime(data.checkedInStudents);
 
         loadedData.add(Class(
-            id: data.id,
-            className: data.className,
-            date: data.date,
-            adherence: data.adherence,
-            checkedInStudents: new List.from(filterResult['overtimeStudents'])
-              ..addAll(filterResult['checkedInStudents']),
-            checkedOutStudents: data.checkedOutStudents,
-            overtimeStudents: filterResult['overtimeStudents']));
+          id: data.id,
+          className: data.className,
+          date: data.date,
+          adherence: data.adherence,
+          checkedInStudents: data.checkedInStudents,
+          overtimeStudents: data.overtimeStudents,
+          checkedOutStudents: data.checkedOutStudents,
+        ));
       });
 
       _classes = loadedData;
@@ -78,18 +77,14 @@ class Classes with ChangeNotifier {
       //parse json
       Class classData = Class.fromJson(extractedData);
 
-      //filter overtimes
-      Map<String, List> filterResult =
-          filterOvertime(classData.checkedInStudents);
-
       //assign to live  class
       _liveClass = Class(
           id: classData.id,
           className: classData.className,
           date: classData.date,
-          checkedInStudents: filterResult['checkedInStudents'],
+          checkedInStudents: classData.checkedInStudents,
           checkedOutStudents: classData.checkedOutStudents,
-          overtimeStudents: filterResult['overtimeStudents']);
+          overtimeStudents: classData.overtimeStudents);
 
       notifyListeners();
     } catch (error) {

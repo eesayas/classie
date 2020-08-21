@@ -21,7 +21,7 @@ export 'widgets/add_class.dart';
 export 'widgets/add_student.dart';
 export 'widgets/student_dialog.dart';
 export 'widgets/student_card.dart';
-export 'widgets/checkout_dialog.dart';
+// export 'widgets/checkout_dialog.dart';
 
 //providers
 export 'providers/class.dart';
