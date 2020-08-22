@@ -8,7 +8,6 @@ export 'package:provider/provider.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 export 'package:classie/main.dart';
 
 //custom screens

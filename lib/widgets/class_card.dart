@@ -67,9 +67,11 @@ class ClassCard extends StatelessWidget {
                                                       fontSize: 22))),
                                         ),
                                       ),
-                                      onTap: () {
-                                        callback("ON_TIME");
-                                      },
+                                      onTap: !inIndex
+                                          ? () {
+                                              callback("ON_TIME");
+                                            }
+                                          : null,
                                     ),
                                     Center(
                                         child: Text('on time',
@@ -95,9 +97,11 @@ class ClassCard extends StatelessWidget {
                                                       fontSize: 22))),
                                         ),
                                       ),
-                                      onTap: () {
-                                        callback("OVERTIME");
-                                      },
+                                      onTap: !inIndex
+                                          ? () {
+                                              callback("OVERTIME");
+                                            }
+                                          : null,
                                     ),
                                     Center(
                                         child: Text('overtime',
@@ -123,9 +127,11 @@ class ClassCard extends StatelessWidget {
                                                       fontSize: 22))),
                                         ),
                                       ),
-                                      onTap: () {
-                                        callback("SIGNED_OUT");
-                                      },
+                                      onTap: !inIndex
+                                          ? () {
+                                              callback("SIGNED_OUT");
+                                            }
+                                          : null,
                                     ),
                                     Center(
                                         child: Text('signed out',

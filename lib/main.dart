@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 //init storage from flutter sec storage package
 final storage = FlutterSecureStorage();
 
+//to override https socket triggers
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext context) {
