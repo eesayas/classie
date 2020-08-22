@@ -32,7 +32,11 @@ class Classes with ChangeNotifier {
   Future<void> fetchClasses() async {
     final url = '${DotEnv().env['API_PROXY']}/class';
     try {
-      final response = await http.get(url);
+      //get headers
+      final headers = await tokenConfig();
+
+      //make request to server for classes
+      final response = await http.get(url, headers: headers);
       final extractedData = json.decode(response.body) as List;
       List<Class> classData =
           extractedData.map((data) => Class.fromJson(data)).toList();

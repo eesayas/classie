@@ -1,9 +1,16 @@
 import 'package:classie/exports.dart';
 
+import '../providers/class.dart';
+
 /*
 @desc This will be shown in the Class Index and Class Show header
 */
+typedef void StringCallback(String val);
+
 class ClassCard extends StatelessWidget {
+  final StringCallback callback;
+  ClassCard({this.callback});
+
   @override
   Widget build(BuildContext context) {
     //define data
@@ -46,21 +53,26 @@ class ClassCard extends StatelessWidget {
                                 // PRESENT
                                 Column(
                                   children: <Widget>[
-                                    ClipOval(
-                                      child: Container(
-                                        color: HexColor('#6231c4'),
-                                        height: 70.0, // height of the button
-                                        width: 70.0, // width of the button
-                                        child: Center(
-                                            child: Text(
-                                                '${classData.checkedInStudents.length}',
-                                                style: TextStyle(
-                                                    color: logoWhite,
-                                                    fontSize: 22))),
+                                    InkWell(
+                                      child: ClipOval(
+                                        child: Container(
+                                          color: HexColor('#6231c4'),
+                                          height: 70.0, // height of the button
+                                          width: 70.0, // width of the button
+                                          child: Center(
+                                              child: Text(
+                                                  '${classData.checkedInStudents.length}',
+                                                  style: TextStyle(
+                                                      color: logoWhite,
+                                                      fontSize: 22))),
+                                        ),
                                       ),
+                                      onTap: () {
+                                        callback("ON_TIME");
+                                      },
                                     ),
                                     Center(
-                                        child: Text('present',
+                                        child: Text('on time',
                                             style: TextStyle(
                                                 color: HexColor('#5027b3'),
                                                 fontSize: 18)))
@@ -69,18 +81,23 @@ class ClassCard extends StatelessWidget {
                                 //OVERTIME
                                 Column(
                                   children: <Widget>[
-                                    ClipOval(
-                                      child: Container(
-                                        color: HexColor('#c94f4f'),
-                                        height: 70.0, // height of the button
-                                        width: 70.0, // width of the button
-                                        child: Center(
-                                            child: Text(
-                                                '${classData.overtimeStudents.length}',
-                                                style: TextStyle(
-                                                    color: logoWhite,
-                                                    fontSize: 22))),
+                                    InkWell(
+                                      child: ClipOval(
+                                        child: Container(
+                                          color: HexColor('#c94f4f'),
+                                          height: 70.0, // height of the button
+                                          width: 70.0, // width of the button
+                                          child: Center(
+                                              child: Text(
+                                                  '${classData.overtimeStudents.length}',
+                                                  style: TextStyle(
+                                                      color: logoWhite,
+                                                      fontSize: 22))),
+                                        ),
                                       ),
+                                      onTap: () {
+                                        callback("OVERTIME");
+                                      },
                                     ),
                                     Center(
                                         child: Text('overtime',
@@ -92,18 +109,23 @@ class ClassCard extends StatelessWidget {
                                 // SIGNED OUT
                                 Column(
                                   children: <Widget>[
-                                    ClipOval(
-                                      child: Container(
-                                        color: HexColor('#7e7d7d'),
-                                        height: 70.0, // height of the button
-                                        width: 70.0, // width of the button
-                                        child: Center(
-                                            child: Text(
-                                                '${classData.checkedOutStudents.length}',
-                                                style: TextStyle(
-                                                    color: logoWhite,
-                                                    fontSize: 22))),
+                                    InkWell(
+                                      child: ClipOval(
+                                        child: Container(
+                                          color: HexColor('#7e7d7d'),
+                                          height: 70.0, // height of the button
+                                          width: 70.0, // width of the button
+                                          child: Center(
+                                              child: Text(
+                                                  '${classData.checkedOutStudents.length}',
+                                                  style: TextStyle(
+                                                      color: logoWhite,
+                                                      fontSize: 22))),
+                                        ),
                                       ),
+                                      onTap: () {
+                                        callback("SIGNED_OUT");
+                                      },
                                     ),
                                     Center(
                                         child: Text('signed out',

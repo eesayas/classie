@@ -1,6 +1,9 @@
 import '../exports.dart';
 import 'package:http/http.dart' as http;
 
+import '../exports.dart';
+import '../exports.dart';
+
 class Class with ChangeNotifier {
   String id;
   String className;
@@ -53,6 +56,8 @@ class Class with ChangeNotifier {
       checkedInStudents = classData.checkedInStudents;
       overtimeStudents = classData.overtimeStudents;
       checkedOutStudents = classData.checkedOutStudents;
+
+      notifyListeners();
     } catch (err) {
       throw (err);
     }
@@ -86,6 +91,9 @@ class Class with ChangeNotifier {
       overtimeStudents = extractedData['overtimeStudents'];
       checkedOutStudents = extractedData['checkedOutStudents'];
 
+      //send check in to socket
+      sendCheckIn();
+
       notifyListeners(); //let interested widgets know changes
     } catch (err) {
       throw (err);
@@ -97,15 +105,20 @@ class Class with ChangeNotifier {
       String classId, Map<String, dynamic> studentData) async {
     final String url = '${DotEnv().env['API_PROXY']}/class/$classId/checkout';
     final Map<String, String> headers = {"Content-type": "application/json"};
-    // final String jsonData = json.encode({
-    //   'student': studentData['student'],
-    //   'span': studentData['span'],
-    //   'classId': classId,
-    // });
+
+    final String jsonData = json.encode({
+      'student': studentData['student'],
+      'status': studentData['status'],
+      'startTime': studentData['startTime'],
+      'expectedEnd': studentData['expectedEnd'],
+      'endTime': studentData['endTime'],
+      'span': studentData['span'],
+      'classId': classId,
+    });
 
     try {
       //make a put request
-      final response = await http.put(url, headers: headers, body: studentData);
+      final response = await http.put(url, headers: headers, body: jsonData);
 
       //decode response server
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -118,6 +131,8 @@ class Class with ChangeNotifier {
       checkedInStudents = extractedData['checkedInStudents'];
       overtimeStudents = extractedData['overtimeStudents'];
       checkedOutStudents = extractedData['checkedOutStudents'];
+
+      sendCheckOut();
 
       notifyListeners(); //let interested widgets know changes
     } catch (err) {

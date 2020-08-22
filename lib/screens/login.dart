@@ -1,6 +1,35 @@
 import '../exports.dart';
+import 'package:http/http.dart' as http;
 
+//this class will encapsulate the login screen
 class LoginScreen extends StatelessWidget {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  //This function will login in the user
+  Future<String> attemptLogIn(String username, String password) async {
+    //encode data to be sent to server
+    final String jsonData = json.encode({
+      "username": username,
+      "password": password,
+    });
+
+    //set headers
+    final Map<String, String> headers = {"Content-type": "application/json"};
+
+    //send request to server
+    var res = await http.post("${DotEnv().env['API_PROXY']}/user/login",
+        headers: headers, body: jsonData);
+
+    //extract token from response
+    var extractedData = json.decode(res.body) as Map<String, dynamic>;
+    var token = extractedData["token"];
+
+    //return it if successful
+    if (res.statusCode == 200) return token;
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,9 +56,12 @@ class LoginScreen extends StatelessWidget {
                     style: TextStyle(color: logoWhite, fontSize: 60),
                   ),
                 ),
+
+                //THIS IS THE USERNAME INPUT
                 TextField(
+                  controller: _usernameController,
                   decoration: InputDecoration(
-                    hintText: "Phone number",
+                    hintText: "Username",
                     hintStyle: TextStyle(
                         color: mildWhite, fontWeight: FontWeight.w900),
                     enabledBorder: UnderlineInputBorder(
@@ -43,7 +75,10 @@ class LoginScreen extends StatelessWidget {
                       TextStyle(color: logoWhite, fontWeight: FontWeight.w900),
                   keyboardType: TextInputType.number,
                 ),
+
+                //THIS IS THE PASSWORD INPUT
                 TextField(
+                  controller: _passwordController,
                   decoration: InputDecoration(
                     hintText: "Password",
                     hintStyle: TextStyle(
@@ -59,16 +94,34 @@ class LoginScreen extends StatelessWidget {
                       TextStyle(color: logoWhite, fontWeight: FontWeight.w900),
                   obscureText: true,
                 ),
+
+                //THIS IS THE SIGN IN BUTTON
                 Align(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40),
                     child: RaisedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    ClassIndex())); //go to my classes
+                      onPressed: () async {
+                        var username = _usernameController.text;
+                        var password = _passwordController.text;
+                        var jwt = await attemptLogIn(username, password);
+
+                        if (jwt != null) {
+                          //store jwt in local secure storage
+                          storage.write(key: "jwt", value: jwt);
+
+                          //then navigate to class live (if live)
+                          Navigator.pushNamed(context, '/class-index');
+                        } else {
+                          // show error dialog if login is unsuccessful
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text("Login Error"),
+                              content:
+                                  Text("Something went wrong while logging in"),
+                            ),
+                          );
+                        }
                       },
                       color: logoWhite,
                       child: Container(
@@ -88,29 +141,6 @@ class LoginScreen extends StatelessWidget {
                   ),
                   alignment: Alignment.centerLeft,
                 ),
-                Padding(
-                    padding: EdgeInsets.only(bottom: 50),
-                    child: InkWell(
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text.rich(TextSpan(
-                            text: 'Don’t have an account? ',
-                            style: TextStyle(color: mildWhite, fontSize: 18),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: 'Sign Up',
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline))
-                            ])),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    RegisterScreen())); //go to sign up form
-                      },
-                    ))
               ],
             ))),
           ),

@@ -2,9 +2,7 @@ import '../exports.dart';
 
 class ClassShow extends StatefulWidget {
   static const routeName = '/class-show';
-
   final String classId;
-
   ClassShow({this.classId});
 
   @override
@@ -12,27 +10,33 @@ class ClassShow extends StatefulWidget {
 }
 
 class _ClassShowState extends State<ClassShow> {
-  var _isInit = true;
-  var _isLoading = false;
+  var _filter = "ON_TIME";
 
   @override
   void initState() {
     super.initState();
+    socket.connect(); //connect to socket when opened
 
-    print(widget.classId);
+    Future.delayed(Duration.zero).then((_) {
+      Provider.of<Class>(context, listen: false).showClass(widget.classId);
+
+      newCheckIn(() =>
+          Provider.of<Class>(context, listen: false).showClass(widget.classId));
+      newCheckOut(() =>
+          Provider.of<Class>(context, listen: false).showClass(widget.classId));
+      overTimeCheck(() =>
+          Provider.of<Class>(context, listen: false).showClass(widget.classId));
+    });
   }
 
   @override
-  void didChangeDependecies() {
-    if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-    super.didChangeDependencies();
+  void dispose() {
+    socket.dispose();
+    super.dispose();
   }
 
   //This method will trigger barcode scanner
+  // ignore: missing_return
   Future<String> scanBarcodeNormal() async {
     String barcodeScanRes;
     try {
@@ -49,7 +53,7 @@ class _ClassShowState extends State<ClassShow> {
 
   @override
   Widget build(BuildContext context) {
-    // get the live class
+    // get the class
     final classData = Provider.of<Class>(context);
 
     return Scaffold(
@@ -84,13 +88,41 @@ class _ClassShowState extends State<ClassShow> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
               child: Column(children: <Widget>[
-                ClassCard(),
-                Expanded(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: classData.checkedInStudents.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            StudentCard(classData.checkedInStudents[index]))),
+                ClassCard(callback: (val) => setState(() => _filter = val)),
+
+                //THIS IS THE LIST OF ON TIME STUDENTS
+                Visibility(
+                  visible: (_filter == "ON_TIME") ? true : false,
+                  child: Expanded(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: classData.checkedInStudents.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              StudentCard(classData.checkedInStudents[index]))),
+                ),
+
+                //THIS IS THE LIST OF OVERTIME STUDENTS
+                Visibility(
+                  visible: (_filter == "OVERTIME") ? true : false,
+                  child: Expanded(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: classData.overtimeStudents.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              StudentCard(classData.overtimeStudents[index]))),
+                ),
+
+                //THIS IS THE LIST OF CHECKEDOUT STUDENTS
+                Visibility(
+                  visible: (_filter == "SIGNED_OUT") ? true : false,
+                  child: Expanded(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: classData.checkedOutStudents.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              StudentCard(
+                                  classData.checkedOutStudents[index]))),
+                ),
               ]),
             )),
         floatingActionButton: FloatingActionButton(

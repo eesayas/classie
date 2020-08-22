@@ -50,7 +50,7 @@ class StudentCard extends StatelessWidget {
                                   child: RaisedButton(
                                     color: HexColor('c94f4f'),
                                     onPressed: () {
-                                      classData.checkInStudent(
+                                      classData.checkOutStudent(
                                           classData.id, studentData);
                                     },
                                     child: Text("SIGN OUT"),

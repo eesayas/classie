@@ -28,6 +28,8 @@ dependencies:
   intl: ^0.16.1
   provider: ^4.3.2
   flutter_barcode_scanner: ^1.0.1
+  flutter_secure_storage: ^3.3.3  
+  socket_io_client: ^0.9.11
 
 dev_dependencies:
   flutter_test:

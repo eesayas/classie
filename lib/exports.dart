@@ -1,4 +1,5 @@
 //flutter lib
+export 'dart:io';
 export 'dart:async';
 export 'dart:convert';
 export 'package:flutter/material.dart';
@@ -6,6 +7,9 @@ export 'package:flutter_dotenv/flutter_dotenv.dart';
 export 'package:provider/provider.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+export 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+export 'package:classie/main.dart';
 
 //custom screens
 export 'screens/login.dart';
@@ -35,3 +39,7 @@ export 'helpers/hexcolor.dart';
 
 //controllers
 export 'controllers/twilio_sender.dart';
+export 'controllers/socket_listener.dart';
+
+//auth
+export 'package:classie/providers/auth.dart';
