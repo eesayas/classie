@@ -73,7 +73,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   style:
                       TextStyle(color: logoWhite, fontWeight: FontWeight.w900),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                 ),
 
                 //THIS IS THE PASSWORD INPUT
